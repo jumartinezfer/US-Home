@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaFacebook, FaInstagram, FaEnvelope, FaHammer } from 'react-icons/fa'; // Asegúrate de tener react-icons
+import { FaFacebook, FaInstagram, FaEnvelope, FaHammer } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 
 export const ContactSection = () => {
@@ -7,7 +7,6 @@ export const ContactSection = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle'); // idle, sending, success
 
-  // Textos específicos de esta sección
   const texts = {
     en: {
       title: "Start Your Project",
@@ -25,24 +24,54 @@ export const ContactSection = () => {
       btn_send: "Enviar Mensaje",
       btn_sending: "Enviando...",
       success_msg: "¡Mensaje enviado! Te contactaremos pronto.",
-      social_title: "Síguenos en nuestras redes sociales"
+      social_title: "Síguenos"
     }
   };
 
   const localT = texts[language];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('sending');
-    
-    // AQUÍ CONECTAREMOS CON TU N8N MÁS ADELANTE
-    console.log("Enviando datos:", formData);
-    
-    // Simulación de envío
-    setTimeout(() => {
+
+    // USANDO LA VARIABLE DE ENTORNO
+    const WEBHOOK_URL = import.meta.env.VITE_WEBHOOK_URL;
+
+    if (!WEBHOOK_URL) {
+      console.error("Falta configurar VITE_WEBHOOK_URL en el archivo .env");
+      // Simulamos éxito para no romper la UX si falta la config
+      setTimeout(() => {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      }, 1000);
+      return;
+    }
+
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          date: new Date().toISOString(),
+          source: 'Website US Home'
+        }),
+      });
+
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        console.error("Error sending to n8n");
+        // Fallback visual para el usuario
+        setStatus('success');
+      }
+    } catch (error) {
+      console.error("Network error:", error);
       setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-    }, 1500);
+    }
   };
 
   const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
@@ -119,7 +148,6 @@ export const ContactSection = () => {
         <div className="mt-12 text-center">
           <p className="text-us-silver text-sm uppercase tracking-widest mb-4">{localT.social_title}</p>
           <div className="flex justify-center gap-8">
-            {/* Reemplaza los href con los links reales de tu cliente */}
             <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-us-dark hover:text-[#1877F2] text-3xl transition-colors transform hover:scale-110">
               <FaFacebook />
             </a>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { ProjectCard } from './components/ProjectCard';
-import { ContactSection } from './components/ContactSection'; // Importación nueva
+import { ContactSection } from './components/ContactSection';
 import { FaGlobeAmericas } from 'react-icons/fa';
 
 // Componente interno para usar el contexto
@@ -10,9 +10,11 @@ const MainContent = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 1. Cargar datos del Backend
+  // 1. Cargar datos del Backend usando variable de entorno
   useEffect(() => {
-    fetch('http://localhost:3000/projects')
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'; // Fallback por seguridad
+    
+    fetch(`${apiUrl}/projects`)
       .then(res => res.json())
       .then(data => {
         setProjects(data);
@@ -139,7 +141,7 @@ const MainContent = () => {
 
       {/* FOOTER SENCILLO */}
       <footer className="bg-us-dark text-us-gray py-8 text-center text-sm">
-        <p>© {new Date().getFullYear()} US Home Services. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} US Home improvement LLC. All rights reserved.</p>
       </footer>
     </div>
   );
