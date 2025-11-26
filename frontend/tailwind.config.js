@@ -10,10 +10,10 @@ export default {
         'us-dark': '#676b69',
         'us-light': '#edefee',
         'us-accent': '#f0940b',
-        'us-mint': '#cbe8d9',
         'us-text': '#7c7478',
         'us-gray': '#d3d3d4',
         'us-silver': '#abacab',
+        'us-mint': '#caecdb',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

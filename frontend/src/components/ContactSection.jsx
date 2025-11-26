@@ -56,7 +56,7 @@ export const ContactSection = () => {
         body: JSON.stringify({
           ...formData,
           date: new Date().toISOString(),
-          source: 'Website US Home'
+          source: 'Website US Home Improvement LLC',
         }),
       });
 
@@ -144,21 +144,6 @@ export const ContactSection = () => {
           )}
         </div>
 
-        {/* REDES SOCIALES */}
-        <div className="mt-12 text-center">
-          <p className="text-us-silver text-sm uppercase tracking-widest mb-4">{localT.social_title}</p>
-          <div className="flex justify-center gap-8">
-            <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-us-dark hover:text-[#1877F2] text-3xl transition-colors transform hover:scale-110">
-              <FaFacebook />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-us-dark hover:text-[#E4405F] text-3xl transition-colors transform hover:scale-110">
-              <FaInstagram />
-            </a>
-            <a href="mailto:ushomeimprovement01@gmail.com" className="text-us-dark hover:text-red-600 text-3xl transition-colors transform hover:scale-110">
-              <FaEnvelope />
-            </a>
-          </div>
-        </div>
       </div>
     </section>
   );
