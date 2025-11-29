@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from 'react-router-dom';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { FaGlobeAmericas } from 'react-icons/fa';
+import NotFound from './pages/NotFound'; 
 
 // Importa las páginas
 import Home from './pages/Home';
@@ -72,7 +73,8 @@ function App() {
         <Route path="/electrical" element={<Electrical />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} /> 
-        {/* Si quieres una página de contacto separada, la añades aquí */}
+        <Route path="*" element={<NotFound />} />
+
       </Routes>
     </LanguageProvider>
   );
