@@ -20,7 +20,7 @@ const SocialLinks = ({ className = "", iconSize = "text-3xl", hoverColor = "hove
       icon: <FaTiktok />, 
       url: 'tiktok.com/@ushomeimprovement5' //https://www.tiktok.com/@ushomeimprovement5 REAL URL
     },
-    // Ejemplo de escalabilidad: Si quieres WhatsApp en el futuro, solo descomenta:
+    // whatsapp para el futuro
     // { name: 'WhatsApp', icon: <FaWhatsapp />, url: 'https://wa.me/1234567890' },
   ];
 
