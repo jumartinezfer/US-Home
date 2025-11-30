@@ -3,12 +3,12 @@ import { FaFacebook, FaInstagram, FaTiktok, FaEnvelope, FaLinkedin, FaWhatsapp }
 const SocialLinks = ({ className = "", iconSize = "text-3xl", hoverColor = "hover:text-us-accent" }) => {
   
   // LISTA MAESTRA DE REDES
-  // Para agregar una nueva, solo añade un objeto aquí.
+
   const networks = [
     { 
       name: 'Facebook',
       icon: <FaFacebook />, 
-      url: 'https://facebook.com/ushomeservices' // Pon tu URL real
+      url: 'https://facebook.com/ushomeservices'
     },
     { 
       name: 'Instagram',
