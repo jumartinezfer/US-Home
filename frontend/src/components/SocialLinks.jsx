@@ -13,12 +13,12 @@ const SocialLinks = ({ className = "", iconSize = "text-3xl", hoverColor = "hove
     { 
       name: 'Instagram',
       icon: <FaInstagram />, 
-      url: 'https://instagram.com/ushomeservices' 
+      url: 'https://www.instagram.com/ushomeimprovement?igsh=MW5pd3Vnb25peTg3NA== ' 
     },
     { 
       name: 'TikTok',
       icon: <FaTiktok />, 
-      url: 'https://tiktok.com/@ushomeservices' 
+      url: 'tiktok.com/@ushomeimprovement5' //https://www.tiktok.com/@ushomeimprovement5 REAL URL
     },
     // Ejemplo de escalabilidad: Si quieres WhatsApp en el futuro, solo descomenta:
     // { name: 'WhatsApp', icon: <FaWhatsapp />, url: 'https://wa.me/1234567890' },

@@ -67,9 +67,19 @@ export default function Construction() {
             borderRadius={0.05} 
         />
       </div>
-
-      {/* 4. CONTACTO */}
-      <ContactSection />
+      
+      {/* NUEVO FINAL SIMPLE (Reemplaza <ContactSection />) */}
+      <div className="py-20 bg-us-light text-center px-4">
+        <h2 className="text-3xl font-bold text-us-dark mb-6">
+            {language === 'en' ? "Ready to transform your space?" : "¿Listo para transformar tu espacio?"}
+        </h2>
+        <Link 
+            to="/contact" 
+            className="inline-block bg-us-accent hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all transform hover:scale-105 shadow-lg"
+        >
+            {language === 'en' ? "Get Information" : "Solicita Información"}
+        </Link>
+      </div>
     </div>
   );
 }

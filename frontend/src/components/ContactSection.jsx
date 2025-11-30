@@ -1,23 +1,19 @@
 import { useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import Swal from 'sweetalert2'; 
-import emailjs from '@emailjs/browser'; // Asegúrate de instalar: npm install @emailjs/browser
+import emailjs from '@emailjs/browser';
 import { FaImages, FaPaperPlane, FaExclamationCircle } from 'react-icons/fa';
 
 export const ContactSection = () => {
   const { language, t } = useLanguage();
   
-  // ---------------------------------------------------------------------------
-  // CONFIGURACIÓN DE SERVICIOS (Reemplaza con tus datos reales)
-  // ---------------------------------------------------------------------------
-  
+  // --- CARGAR VARIABLES DE ENTORNO ---
   const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
   
   const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-  // ---------------------------------------------------------------------------
 
   const [formData, setFormData] = useState({
     name: '',
@@ -28,7 +24,6 @@ export const ContactSection = () => {
   
   const [uploading, setUploading] = useState(false);
 
-  // Validación de formulario
   const isFormValid = 
     formData.name.trim() !== '' &&
     formData.email.trim() !== '' &&
@@ -64,22 +59,34 @@ export const ContactSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Verificar spam local (1 hora de espera entre envíos)
+    // -------------------------------------------------------
+    // LÓGICA DE 1 SOLICITUD CADA 24 HORAS
+    // -------------------------------------------------------
     const lastSub = localStorage.getItem(`last_sub_${formData.email}`);
-    if (lastSub && (Date.now() - lastSub) < 3600000) {
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+    const now = Date.now();
+
+    if (lastSub && (now - lastSub) < ONE_DAY_IN_MS) {
+      // Calcular tiempo restante para ser amables con el usuario
+      const hoursLeft = Math.ceil((ONE_DAY_IN_MS - (now - lastSub)) / (1000 * 60 * 60));
+      
       Swal.fire({ 
         icon: 'info', 
-        title: language === 'en' ? 'Please Wait' : 'Por favor espera',
-        text: language === 'en' ? 'You already sent a request recently.' : 'Ya enviaste una solicitud recientemente.',
+        title: language === 'en' ? 'Daily Limit Reached' : 'Límite Diario Alcanzado',
+        // El mensaje específico que pediste:
+        text: language === 'en' 
+          ? `You can send another request in ${hoursLeft} hours (24h limit).` 
+          : `Ya has enviado una solicitud. Podrás enviar otra solicitud dentro de ${hoursLeft} horas (Límite de 24h).`,
         confirmButtonColor: '#676b69' 
       });
       return;
     }
+    // -------------------------------------------------------
 
     setUploading(true);
 
     try {
-      // PASO 1: SUBIR FOTOS A CLOUDINARY
+      // 1. SUBIR A CLOUDINARY
       const imageUrls = await Promise.all(
         formData.images.map(async (file) => {
           const data = new FormData();
@@ -96,12 +103,12 @@ export const ContactSection = () => {
         })
       );
 
-      // PASO 2: ENVIAR CORREO CON EMAILJS
+      // 2. ENVIAR EMAIL
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
         message: formData.message,
-        photos: imageUrls.join('\n'), // Convierte el array de links en texto plano
+        photos: imageUrls.join('\n'),
         date: new Date().toLocaleString()
       };
 
@@ -112,18 +119,19 @@ export const ContactSection = () => {
         EMAILJS_PUBLIC_KEY
       );
 
-      // PASO 3: ÉXITO
+      // 3. ÉXITO
       Swal.fire({
         icon: 'success',
         title: language === 'en' ? 'Sent Successfully!' : '¡Enviado con Éxito!',
         text: language === 'en' 
-          ? 'We have received your project details. We will contact you shortly.' 
-          : 'Hemos recibido los detalles de tu proyecto. Te contactaremos pronto.',
+          ? 'We have received your details. We will contact you shortly.' 
+          : 'Hemos recibido tus detalles. Te contactaremos pronto.',
         confirmButtonColor: '#f0940b'
       });
 
-      // Guardar registro y limpiar
+      // GUARDAR LA HORA ACTUAL PARA BLOQUEAR POR 24H
       localStorage.setItem(`last_sub_${formData.email}`, Date.now());
+      
       setFormData({ name: '', email: '', message: '', images: [] });
 
     } catch (error) {
@@ -131,7 +139,7 @@ export const ContactSection = () => {
       Swal.fire({ 
         icon: 'error', 
         title: 'Error', 
-        text: language === 'en' ? 'Could not send message. Please try again.' : 'No se pudo enviar el mensaje. Intenta de nuevo.',
+        text: language === 'en' ? 'Could not send message.' : 'No se pudo enviar el mensaje.',
         confirmButtonColor: '#d33' 
       });
     } finally {
@@ -143,7 +151,6 @@ export const ContactSection = () => {
     <section id="contact" className="py-20 bg-us-light relative">
       <div className="max-w-3xl mx-auto px-4">
         
-        {/* TÍTULO CENTRALIZADO */}
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-us-dark mb-4">
             {t.contact_title || (language === 'en' ? 'Start Your Project' : 'Inicia tu Proyecto')}
@@ -157,7 +164,7 @@ export const ContactSection = () => {
 
         <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
             
-            {/* NOTA DE VISITA (INTEGRADA Y ELEGANTE) */}
+            {/* NOTA DE VISITA */}
             <div className="bg-us-accent/5 border-l-4 border-us-accent p-4 mb-10 rounded-r-lg flex gap-3 items-start">
                 <FaExclamationCircle className="text-us-accent text-xl mt-1 shrink-0" />
                 <div>
@@ -174,7 +181,6 @@ export const ContactSection = () => {
 
             <form onSubmit={handleSubmit} className="space-y-8">
               
-              {/* NOMBRE Y EMAIL */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="group relative">
                   <input 
@@ -198,7 +204,6 @@ export const ContactSection = () => {
                 </div>
               </div>
 
-              {/* MENSAJE */}
               <div className="group relative">
                 <textarea 
                     name="message" rows="4" value={formData.message} onChange={handleChange} 
@@ -210,7 +215,6 @@ export const ContactSection = () => {
                 </label>
               </div>
 
-              {/* ZONA DE FOTOS */}
               <div>
                 <div className="flex justify-between items-end mb-3">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">
@@ -237,7 +241,6 @@ export const ContactSection = () => {
                     </div>
                 </div>
 
-                {/* PREVIEWS DE FOTOS */}
                 {formData.images.length > 0 && (
                     <div className="flex gap-3 mt-4 overflow-x-auto pb-2 px-1 scrollbar-hide">
                         {formData.images.map((file, index) => (
@@ -250,7 +253,6 @@ export const ContactSection = () => {
                 )}
               </div>
 
-              {/* BOTÓN DE ENVÍO */}
               <button 
                 type="submit"
                 disabled={!isFormValid || uploading}

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
 import './InfiniteMenu.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const discVertShaderSource = `#version 300 es
 
@@ -912,6 +914,7 @@ export default function InfiniteMenu({ items = [] }) {
   const canvasRef = useRef(null);
   const [activeItem, setActiveItem] = useState(null);
   const [isMoving, setIsMoving] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -923,7 +926,8 @@ export default function InfiniteMenu({ items = [] }) {
     };
 
     if (canvas) {
-      sketch = new InfiniteGridMenu(canvas, items.length ? items : defaultItems, handleActiveItem, setIsMoving, sk =>
+      const menuItems = items.length ? items : defaultItems;
+      sketch = new InfiniteGridMenu(canvas, menuItems, handleActiveItem, setIsMoving, sk =>
         sk.run()
       );
     }
@@ -944,22 +948,32 @@ export default function InfiniteMenu({ items = [] }) {
 
   const handleButtonClick = () => {
     if (!activeItem?.link) return;
+
     if (activeItem.link.startsWith('http')) {
       window.open(activeItem.link, '_blank');
     } else {
-      console.log('Internal route:', activeItem.link);
+      navigate(activeItem.link);
     }
   };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <canvas id="infinite-grid-menu-canvas" ref={canvasRef} />
+      <canvas 
+        id="infinite-grid-menu-canvas" 
+        ref={canvasRef} 
+        onClick={() => !isMoving && handleButtonClick()}
+        style={{ cursor: isMoving ? 'grabbing' : 'pointer' }}
+      />
 
       {activeItem && (
         <>
-          <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>{activeItem.title}</h2>
+          <h2 className={`face-title ${isMoving ? 'inactive' : 'active'}`}>
+            {activeItem.title}
+          </h2>
 
-          <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}> {activeItem.description}</p>
+          <p className={`face-description ${isMoving ? 'inactive' : 'active'}`}> 
+            {activeItem.description}
+          </p>
 
           <div onClick={handleButtonClick} className={`action-button ${isMoving ? 'inactive' : 'active'}`}>
             <p className="action-button-icon">&#x2197;</p>
@@ -969,3 +983,4 @@ export default function InfiniteMenu({ items = [] }) {
     </div>
   );
 }
+
