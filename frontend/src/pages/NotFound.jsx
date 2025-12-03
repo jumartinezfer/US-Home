@@ -36,6 +36,8 @@ export default function NotFound() {
           {language === 'en' ? "Back to Home" : "Volver al Inicio"}
         </Link>
       </div>
+      
     </div>
+    
   );
 }

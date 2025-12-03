@@ -7,7 +7,7 @@ import { FaImages, FaPaperPlane, FaExclamationCircle } from 'react-icons/fa';
 export const ContactSection = () => {
   const { language, t } = useLanguage();
   
-  // --- CARGAR VARIABLES DE ENTORNO ---
+  // --- VARIABLES DE ENTORNO ---
   const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
   
@@ -15,18 +15,24 @@ export const ContactSection = () => {
   const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
+  // 1. AGREGAMOS PHONE Y ADDRESS AL ESTADO
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',    // Nuevo
+    address: '',  // Nuevo
     message: '',
     images: []
   });
   
   const [uploading, setUploading] = useState(false);
 
+  // 2. ACTUALIZAMOS LA VALIDACIÓN
   const isFormValid = 
     formData.name.trim() !== '' &&
     formData.email.trim() !== '' &&
+    formData.phone.trim() !== '' &&    // Nuevo
+    formData.address.trim() !== '' &&  // Nuevo
     formData.message.trim() !== '' &&
     formData.images.length >= 3 && 
     formData.images.length <= 5;
@@ -59,34 +65,28 @@ export const ContactSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // -------------------------------------------------------
     // LÓGICA DE 1 SOLICITUD CADA 24 HORAS
-    // -------------------------------------------------------
     const lastSub = localStorage.getItem(`last_sub_${formData.email}`);
-    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+    const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
     const now = Date.now();
 
     if (lastSub && (now - lastSub) < ONE_DAY_IN_MS) {
-      // Calcular tiempo restante para ser amables con el usuario
       const hoursLeft = Math.ceil((ONE_DAY_IN_MS - (now - lastSub)) / (1000 * 60 * 60));
-      
       Swal.fire({ 
         icon: 'info', 
         title: language === 'en' ? 'Daily Limit Reached' : 'Límite Diario Alcanzado',
-        // El mensaje específico que pediste:
         text: language === 'en' 
-          ? `You can send another request in ${hoursLeft} hours (24h limit).` 
-          : `Ya has enviado una solicitud. Podrás enviar otra solicitud dentro de ${hoursLeft} horas (Límite de 24h).`,
+          ? `You can send another request in ${hoursLeft} hours.` 
+          : `Podrás enviar otra solicitud dentro de ${hoursLeft} horas.`,
         confirmButtonColor: '#676b69' 
       });
       return;
     }
-    // -------------------------------------------------------
 
     setUploading(true);
 
     try {
-      // 1. SUBIR A CLOUDINARY
+      // SUBIR FOTOS
       const imageUrls = await Promise.all(
         formData.images.map(async (file) => {
           const data = new FormData();
@@ -103,10 +103,12 @@ export const ContactSection = () => {
         })
       );
 
-      // 2. ENVIAR EMAIL
+      // 3. ENVIAR EMAIL CON LOS NUEVOS DATOS
       const templateParams = {
         from_name: formData.name,
         from_email: formData.email,
+        phone: formData.phone,      // Nuevo
+        address: formData.address,  // Nuevo
         message: formData.message,
         photos: imageUrls.join('\n'),
         date: new Date().toLocaleString()
@@ -119,20 +121,17 @@ export const ContactSection = () => {
         EMAILJS_PUBLIC_KEY
       );
 
-      // 3. ÉXITO
       Swal.fire({
         icon: 'success',
         title: language === 'en' ? 'Sent Successfully!' : '¡Enviado con Éxito!',
         text: language === 'en' 
-          ? 'We have received your details. We will contact you shortly.' 
-          : 'Hemos recibido tus detalles. Te contactaremos pronto.',
+          ? 'We will contact you shortly.' 
+          : 'Te contactaremos pronto.',
         confirmButtonColor: '#f0940b'
       });
 
-      // GUARDAR LA HORA ACTUAL PARA BLOQUEAR POR 24H
       localStorage.setItem(`last_sub_${formData.email}`, Date.now());
-      
-      setFormData({ name: '', email: '', message: '', images: [] });
+      setFormData({ name: '', email: '', phone: '', address: '', message: '', images: [] });
 
     } catch (error) {
       console.error(error);
@@ -164,7 +163,6 @@ export const ContactSection = () => {
 
         <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
             
-            {/* NOTA DE VISITA */}
             <div className="bg-us-accent/5 border-l-4 border-us-accent p-4 mb-10 rounded-r-lg flex gap-3 items-start">
                 <FaExclamationCircle className="text-us-accent text-xl mt-1 shrink-0" />
                 <div>
@@ -173,14 +171,15 @@ export const ContactSection = () => {
                     </h4>
                     <p className="text-sm text-gray-600 leading-relaxed">
                         {language === 'en' 
-                        ? "A technical visit is mandatory for all projects before a final quote can be provided to ensure accuracy." 
-                        : "Una visita técnica es obligatoria para todos los proyectos antes de entregar una cotización final para asegurar precisión."}
+                        ? "A technical visit is mandatory for all projects before a final quote can be provided." 
+                        : "Una visita técnica es obligatoria para todos los proyectos antes de entregar una cotización final."}
                     </p>
                 </div>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-8">
               
+              {/* FILA 1: NOMBRE Y EMAIL */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="group relative">
                   <input 
@@ -204,6 +203,31 @@ export const ContactSection = () => {
                 </div>
               </div>
 
+              {/* FILA 2: TELÉFONO Y DIRECCIÓN (NUEVA FILA) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="group relative">
+                  <input 
+                    type="tel" name="phone" value={formData.phone} onChange={handleChange} 
+                    className="peer w-full border-b-2 border-gray-200 py-2 placeholder-transparent focus:border-us-accent outline-none transition-colors text-us-dark font-medium bg-transparent" 
+                    placeholder="Phone" 
+                  />
+                  <label className="absolute left-0 -top-3.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-us-accent font-bold uppercase tracking-wider">
+                    {language === 'en' ? 'Phone Number' : 'Teléfono'}
+                  </label>
+                </div>
+                <div className="group relative">
+                  <input 
+                    type="text" name="address" value={formData.address} onChange={handleChange} 
+                    className="peer w-full border-b-2 border-gray-200 py-2 placeholder-transparent focus:border-us-accent outline-none transition-colors text-us-dark font-medium bg-transparent" 
+                    placeholder="Address" 
+                  />
+                  <label className="absolute left-0 -top-3.5 text-xs text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-3.5 peer-focus:text-xs peer-focus:text-us-accent font-bold uppercase tracking-wider">
+                    {language === 'en' ? 'Address / Zip Code' : 'Dirección / C.P.'}
+                  </label>
+                </div>
+              </div>
+
+              {/* MENSAJE */}
               <div className="group relative">
                 <textarea 
                     name="message" rows="4" value={formData.message} onChange={handleChange} 
@@ -215,6 +239,7 @@ export const ContactSection = () => {
                 </label>
               </div>
 
+              {/* FOTOS */}
               <div>
                 <div className="flex justify-between items-end mb-3">
                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">

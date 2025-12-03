@@ -8,7 +8,7 @@ const SocialLinks = ({ className = "", iconSize = "text-3xl", hoverColor = "hove
     { 
       name: 'Facebook',
       icon: <FaFacebook />, 
-      url: 'https://facebook.com/ushomeservices'
+      url: 'https://www.facebook.com/profile.php?id=61584122746493'
     },
     { 
       name: 'Instagram',
@@ -18,7 +18,7 @@ const SocialLinks = ({ className = "", iconSize = "text-3xl", hoverColor = "hove
     { 
       name: 'TikTok',
       icon: <FaTiktok />, 
-      url: 'tiktok.com/@ushomeimprovement5' //https://www.tiktok.com/@ushomeimprovement5 REAL URL
+      url: 'https://www.tiktok.com/@ushomeimprovement5' 
     },
     // whatsapp para el futuro
     // { name: 'WhatsApp', icon: <FaWhatsapp />, url: 'https://wa.me/1234567890' },

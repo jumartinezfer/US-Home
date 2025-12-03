@@ -1,23 +1,23 @@
-import LiquidEther from '../blocks/Backgrounds/liquidEther/Liquid_Ether';
+import LiquidEther from '../blocks/Backgrounds/LiquidEther/Liquid_Ether'; 
 import InfiniteMenu from '../blocks/Components/InfiniteMenu/InfiniteMenu';
-import ScrollStack from '../blocks/Components/ScrollStack/ScrollStack'; // Asegúrate de tener este componente
+import ScrollStack from '../blocks/Components/ScrollStack/ScrollStack'; 
 import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaInstagram, FaLinkedin, FaCheckCircle, FaHardHat } from 'react-icons/fa';
+import { FaHardHat } from 'react-icons/fa';
 import SocialLinks from '../components/SocialLinks';
 
-// Tarjeta para el ScrollStack (Diseño mejorado)
-const SectionPreview = ({ title, desc, link, image, color }) => (
+// Tarjeta para el ScrollStack
+const SectionPreview = ({ title, desc, link, image, color, textColor = "text-us-dark" }) => (
   <div className="relative w-full h-full flex flex-col md:flex-row overflow-hidden rounded-3xl">
     <div className="w-full md:w-1/2 h-48 md:h-full relative group">
         <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
     </div>
     <div className={`w-full md:w-1/2 p-10 flex flex-col justify-center ${color}`}>
-        <h2 className="text-4xl font-bold mb-6 text-us-dark">{title}</h2>
-        <p className="text-us-text mb-8 text-lg leading-relaxed font-medium">{desc}</p>
-        <Link to={link} className="self-start px-8 py-4 bg-us-dark text-white font-bold rounded-full hover:bg-black transition-all transform hover:scale-105 shadow-xl text-sm uppercase tracking-widest">
-            View Details →
+        <h2 className={`text-4xl font-bold mb-6 ${textColor}`}>{title}</h2>
+        <p className={`${textColor === 'text-white' ? 'text-gray-300' : 'text-us-text'} mb-8 text-lg leading-relaxed font-medium`}>{desc}</p>
+        <Link to={link} className={`self-start px-8 py-4 ${textColor === 'text-white' ? 'bg-white text-us-dark hover:bg-gray-200' : 'bg-us-dark text-white hover:bg-black'} font-bold rounded-full transition-all transform hover:scale-105 shadow-xl text-sm uppercase tracking-widest`}>
+            {textColor === 'text-white' ? 'Get Started →' : 'View Details →'}
         </Link>
     </div>
   </div>
@@ -28,11 +28,14 @@ export default function Home() {
 
   const photos = {
     construction: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800", 
-    electrical: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800"
+    electrical: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800",
+    newBuild: "https://images.unsplash.com/photo-1516880711640-ef7db81be3e1?auto=format&fit=crop&w=800" // Foto nueva
   };
 
+  // --- AQUÍ ESTÁ LA INTEGRACIÓN DE LA NUEVA TARJETA ---
   const stackItems = [
     {
+      // Tarjeta 1: Construcción General
       content: <SectionPreview 
         title={language === 'en' ? "Construction & Remodeling" : "Construcción y Remodelación"}
         desc={language === 'en' 
@@ -40,10 +43,11 @@ export default function Home() {
           : "Desde cimientos sólidos hasta acabados exquisitos. Damos nueva vida a los espacios, asegurando que la integridad estructural se una al diseño moderno."}
         link="/construction"
         image={photos.construction} 
-        color="bg-us-light" // Tarjeta clara
+        color="bg-us-light" 
       />
     },
     {
+      // Tarjeta 2: Electricidad
       content: <SectionPreview 
         title={language === 'en' ? "Electrical Services" : "Servicios Eléctricos"}
         desc={language === 'en' 
@@ -51,7 +55,20 @@ export default function Home() {
           : "Energizando tu hogar con seguridad y eficiencia. Desde mejoras de paneles hasta iluminación inteligente, manejamos la energía que impulsa tu vida."}
         link="/electrical"
         image={photos.electrical}
-        color="bg-white" // Tarjeta blanca pura para contraste al apilarse
+        color="bg-white" 
+      />
+    },
+    {
+      // Tarjeta 3: New Construction (NUEVA)
+      content: <SectionPreview 
+        title={language === 'en' ? "New Construction" : "Construcción desde Cero"}
+        desc={language === 'en' 
+          ? "Building your dream home from the ground up. We specialize in framing, structural integrity, and turning empty lots into completed masterpieces." 
+          : "Construyendo la casa de tus sueños desde el suelo. Nos especializamos en estructuras, integridad y convertir lotes vacíos en obras maestras."}
+        link="/new-constructions"
+        image={photos.newBuild}
+        color="bg-us-accent" // Fondo Naranja para destacar
+        textColor="text-white" // Texto Blanco para contraste
       />
     }
   ];
@@ -64,7 +81,6 @@ export default function Home() {
   ];
 
   return (
-    // Quitamos overflow-hidden del contenedor principal para permitir que sticky funcione
     <div className="min-h-screen bg-transparent relative">
         
         {/* FONDO LÍQUIDO FIXED */}
@@ -76,7 +92,7 @@ export default function Home() {
         <div className="relative z-10">
             
             {/* HERO */}
-            <header className="h-screen flex flex-col items-center justify-center px-4 text-center pointer-events-none">
+            <header className="h-screen flex flex-col items-center justify-center px-4 text-center pointer-events-none relative">
                 <div className="pointer-events-auto max-w-4xl">
                     <h1 className="text-6xl md:text-8xl font-bold text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.5)] mb-6 leading-tight">
                         {t.hero_title}
@@ -85,11 +101,7 @@ export default function Home() {
                         {t.hero_subtitle}
                     </p>
                 </div>
-                
-                {/* REDES SOCIALES FLOTANTES */}
-                <div className="absolute bottom-10 right-10 pointer-events-auto z-50">
-                  <SocialLinks className="text-white/80" iconSize="text-3xl" />
-                </div>
+                {/* Eliminamos los iconos flotantes de aquí para evitar solapamientos */}
             </header>
 
             {/* SECCIÓN PITCH DE VENTA */}
@@ -115,14 +127,14 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* SCROLL STACK RESTAURADO */}
-            {/* Importante: Sin overflow-hidden aquí para que sticky funcione */}
+            {/* SCROLL STACK */}
             <section className="relative py-10">
                 <div className="text-center mb-10 pointer-events-none">
-                     <h3 className="text-white text-4xl font-bold drop-shadow-md">{language === 'en' ? "Our Expertise" : "Nuestra Experiencia"}</h3>
-                     <p className="text-white/80 mt-2">{language === 'en' ? "Scroll to explore services" : "Desliza para explorar servicios"}</p>
+                      <h3 className="text-white text-4xl font-bold drop-shadow-md">{language === 'en' ? "Our Expertise" : "Nuestra Experiencia"}</h3>
+                      <p className="text-white/80 mt-2">{language === 'en' ? "Scroll to explore services" : "Desliza para explorar servicios"}</p>
                 </div>
                 <div className="px-4">
+                    {/* Pasamos los 3 items ahora */}
                     <ScrollStack items={stackItems} />
                 </div>
             </section>
@@ -137,9 +149,34 @@ export default function Home() {
                 </div>
             </section>
 
-            <footer className="bg-black py-10 text-center text-white/50 text-sm relative z-20">
-                © 2025 US Home Improvement LLC. All rights reserved.
+            {/* FOOTER MEJORADO */}
+                  <footer className="bg-black w-full py-12 px-6 relative z-20 border-t border-white/10">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-sm text-white/50">
+                    
+                    {/* 1. IZQUIERDA: CRÉDITOS (Alineado a la izquierda en Desktop) */}
+                    <div className="font-medium hover:text-us-accent transition-colors cursor-default text-center md:text-left order-3 md:order-1">
+                        Designed by <span className="text-white">Whyvrix</span>
+                    </div>
+
+                    {/* 2. CENTRO: REDES SOCIALES (Bloque destacado) */}
+                    <div className="flex flex-col items-center gap-3 order-1 md:order-2">
+                        <p className="text-us-accent text-[10px] uppercase tracking-[0.2em] font-bold">
+                            Follow Us
+                        </p>
+                        <div className="flex gap-4 p-2 bg-white/5 rounded-full border border-white/5 backdrop-blur-sm hover:border-us-accent/30 transition-colors">
+                            <SocialLinks className="text-white hover:text-us-accent transition-transform hover:scale-110 duration-200" iconSize="text-lg" />
+                        </div>
+                    </div>
+
+                    {/* 3. DERECHA: COPYRIGHT (Alineado a la derecha en Desktop) */}
+                    <div className="text-center md:text-right order-2 md:order-3 leading-relaxed">
+                        <p>© 2025 US Home Improvement LLC.</p>
+                        <p className="text-xs opacity-60">All rights reserved.</p>
+                    </div>
+                </div>
             </footer>
+
+
         </div>
     </div>
   );

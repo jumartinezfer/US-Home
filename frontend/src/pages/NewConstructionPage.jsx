@@ -1,24 +1,24 @@
 import { Link } from 'react-router-dom';
 import CircularGallery from '../blocks/Components/CircularGallery/CircularGallery';
 import { useLanguage } from '../context/LanguageContext';
-import { FaTools, FaPaintRoller } from 'react-icons/fa';
+import { FaDraftingCompass, FaHome } from 'react-icons/fa';
 import SocialLinks from '../components/SocialLinks';
 
-export default function Construction() {
+export default function NewConstructionPage() {
   const { language } = useLanguage();
 
-  const beforeImages = [
-    { image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop', text: 'Old Frame' },
-    { image: 'https://images.unsplash.com/photo-1533630765572-7709910d7364?q=80&w=800&auto=format&fit=crop', text: 'Demolition' },
-    { image: 'https://images.unsplash.com/photo-1595846519845-68e298c2edd8?q=80&w=800&auto=format&fit=crop', text: 'Rough' },
-    { image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop', text: 'Planning' },
+  const structureImages = [
+    { image: 'https://images.unsplash.com/photo-1516880711640-ef7db81be3e1?q=80&w=800&auto=format&fit=crop', text: 'Framing' },
+    { image: 'https://images.unsplash.com/photo-1625156374966-868f43590c91?q=80&w=800&auto=format&fit=crop', text: 'Foundation' },
+    { image: 'https://images.unsplash.com/photo-1591588582259-e675bd2e6088?q=80&w=800&auto=format&fit=crop', text: 'Structure' },
+    { image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=800&auto=format&fit=crop', text: 'Blueprints' },
   ];
 
-  const afterImages = [
-    { image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop', text: 'Modern Kitchen' },
-    { image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop', text: 'Luxury Living' },
-    { image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop', text: 'Clean Finish' },
-    { image: 'https://images.unsplash.com/photo-1600596542815-60c37c6525fa?q=80&w=800&auto=format&fit=crop', text: 'Perfect Home' },
+  const finishedImages = [
+    { image: 'https://images.unsplash.com/photo-1600596542815-60c37c6525fa?q=80&w=800&auto=format&fit=crop', text: 'Dream Home' },
+    { image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop', text: 'Modern Design' },
+    { image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=800&auto=format&fit=crop', text: 'New Build' },
+    { image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop', text: 'Move-in Ready' },
   ];
 
   return (
@@ -29,15 +29,15 @@ export default function Construction() {
         <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <Link to="/" className="text-us-accent font-bold mb-6 inline-block hover:underline relative z-10">← Home</Link>
         <div className="flex justify-center items-center gap-3 mb-4 relative z-10">
-            <FaTools className="text-us-accent text-4xl" />
+            <FaDraftingCompass className="text-us-accent text-4xl" />
             <h1 className="text-5xl md:text-6xl font-bold text-white">
-                {language === 'en' ? 'Renovation Projects' : 'Proyectos de Remodelación'}
+                {language === 'en' ? 'New Construction' : 'Obra Nueva'}
             </h1>
         </div>
         <p className="text-xl text-us-light/80 max-w-2xl mx-auto relative z-10 leading-relaxed">
           {language === 'en' 
-            ? "Transforming dated spaces into modern masterpieces. We handle everything from demolition to the final coat of paint." 
-            : "Transformando espacios antiguos en obras maestras modernas. Nos encargamos de todo, desde la demolición hasta la última capa de pintura."}
+            ? "From the first blueprint to the final key turn. We build your vision from the ground up." 
+            : "Desde el primer plano hasta la entrega de llaves. Construimos tu visión desde los cimientos."}
         </p>
       </div>
 
@@ -45,33 +45,37 @@ export default function Construction() {
       <div className="relative w-full h-[600px] bg-us-gray overflow-hidden border-b-4 border-white/20">
         <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-us-dark/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-white/20">
             <span className="text-white font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
+                <FaDraftingCompass /> 
                 {language === 'en' ? 'BEFORE' : 'ANTES'}
             </span>
         </div>
-        <CircularGallery items={beforeImages} bend={3} textColor="#000000" borderRadius={0.05} />
+        <CircularGallery items={structureImages} bend={3} textColor="#000000" borderRadius={0.05} />
       </div>
 
       {/* SECCIÓN 2: DESPUÉS (Fondo Blanco) */}
       <div className="relative w-full h-[600px] bg-white overflow-hidden">
         <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-us-accent/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg">
             <span className="text-white font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
-                <FaPaintRoller /> 
+                <FaHome className="text-white" /> 
                 {language === 'en' ? 'AFTER' : 'DESPUÉS'}
             </span>
         </div>
-        <CircularGallery items={afterImages} bend={-3} textColor="#1a1a1a" borderRadius={0.05} />
+        <CircularGallery items={finishedImages} bend={-3} textColor="#1a1a1a" borderRadius={0.05} />
       </div>
 
       {/* CTA */}
-      <div className="py-20 bg-us-light text-center px-4 border-t border-us-gray">
-        <h2 className="text-3xl font-bold text-us-dark mb-6">
-            {language === 'en' ? "Ready to start your renovation?" : "¿Listo para empezar tu remodelación?"}
+      <div className="py-24 bg-us-light text-center px-4 border-t border-us-gray">
+        <h2 className="text-3xl md:text-4xl font-bold text-us-dark mb-6">
+            {language === 'en' ? "Ready to break ground?" : "¿Listo para empezar la obra?"}
         </h2>
+        <p className="text-lg text-us-text mb-10 max-w-xl mx-auto">
+            {language === 'en' ? "Let's discuss your blueprints and timeline." : "Hablemos sobre tus planos y cronograma."}
+        </p>
         <Link 
             to="/contact" 
-            className="inline-block bg-us-accent hover:bg-orange-600 text-white font-bold py-4 px-10 rounded-full transition-all transform hover:scale-105 shadow-lg"
+            className="inline-block bg-us-accent hover:bg-orange-600 text-white font-bold py-5 px-12 rounded-full transition-all transform hover:scale-105 shadow-xl text-lg uppercase tracking-widest"
         >
-            {language === 'en' ? "Get a Quote" : "Solicitar Cotización"}
+            {language === 'en' ? "Start My Project" : "Iniciar Mi Proyecto"}
         </Link>
       </div>
 

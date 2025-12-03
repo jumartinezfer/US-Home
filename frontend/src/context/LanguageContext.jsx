@@ -39,7 +39,5 @@ export const LanguageProvider = ({ children }) => {
     </LanguageContext.Provider>
   );
 };
-
-// 2. ¡ESTA ES LA LÍNEA QUE PROBABLEMENTE FALTA!
 // Exportación del Hook personalizado
 export const useLanguage = () => useContext(LanguageContext);

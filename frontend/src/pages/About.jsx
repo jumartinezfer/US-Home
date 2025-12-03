@@ -139,8 +139,22 @@ export default function About() {
                 {language === 'en' ? "Go to Contact →" : "Ir a Contacto →"}
             </Link>
         </div>
+        
 
       </div>
+      
+      <footer className="bg-black w-full py-6 px-6 border-t border-white/10 mt-auto">
+    <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/40">
+        <div>
+            Designed by <span className="text-white font-bold">Whyvrix</span>
+        </div>
+        <div>
+            © 2025 US Home Improvement LLC. All rights reserved.
+        </div>
     </div>
+</footer>
+
+    </div>
+    
   );
 }

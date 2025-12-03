@@ -1,14 +1,12 @@
 import { Link } from 'react-router-dom';
 import CircularGallery from '../blocks/Components/CircularGallery/CircularGallery';
-import { ContactSection } from '../components/ContactSection';
 import { useLanguage } from '../context/LanguageContext';
 import { FaBolt, FaExclamationTriangle } from 'react-icons/fa';
+import SocialLinks from '../components/SocialLinks';
 
 export default function Electrical() {
   const { language } = useLanguage();
 
-  // FOTOS DEL "ANTES" (Enfoque: Peligro, Desorden, Antiguo)
-  // Reemplaza estas URLs con tus fotos reales de tableros viejos o cables sueltos
   const beforeImages = [
     { image: 'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?q=80&w=800&auto=format&fit=crop', text: 'Messy Wiring' },
     { image: 'https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=800&auto=format&fit=crop', text: 'Old Panel' },
@@ -16,8 +14,6 @@ export default function Electrical() {
     { image: 'https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?q=80&w=800&auto=format&fit=crop', text: 'Dim Light' },
   ];
 
-  // FOTOS DEL "DESPUÉS" (Enfoque: Seguridad, Orden, Tecnología)
-  // Reemplaza con fotos de trabajos terminados, iluminación LED, paneles nuevos
   const afterImages = [
     { image: 'https://images.unsplash.com/photo-1558402529-d2638a7023e9?q=80&w=800&auto=format&fit=crop', text: 'Smart Panel' },
     { image: 'https://images.unsplash.com/photo-1565514020176-db073741d3d4?q=80&w=800&auto=format&fit=crop', text: 'LED Lighting' },
@@ -28,64 +24,47 @@ export default function Electrical() {
   return (
     <div className="min-h-screen bg-us-light">
       
-      {/* HEADER - Estilo "Electricidad" (Más oscuro y vibrante) */}
+      {/* HEADER */}
       <div className="pt-28 pb-12 px-4 text-center bg-us-dark text-white relative overflow-hidden">
-        
-        {/* Efecto de fondo sutil */}
-        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[radial-gradient(circle_at_50%_50%,#f0940b,transparent)]"></div>
-
+        <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <Link to="/" className="text-us-accent font-bold mb-6 inline-block hover:underline relative z-10">← Home</Link>
-        
         <div className="flex justify-center items-center gap-3 mb-4 relative z-10">
-            <FaBolt className="text-yellow-400 text-4xl animate-pulse" />
+            <FaBolt className="text-us-accent text-4xl animate-pulse" />
             <h1 className="text-5xl md:text-6xl font-bold text-white">
                 {language === 'en' ? 'Electrical Solutions' : 'Soluciones Eléctricas'}
             </h1>
         </div>
-        
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto relative z-10 leading-relaxed">
+        <p className="text-xl text-us-light/80 max-w-2xl mx-auto relative z-10 leading-relaxed">
           {language === 'en' 
-            ? "Powering safety and efficiency. We turn hazardous wiring into state-of-the-art energy systems and provide a great service to our clients while focusing on the best user experience."
-            : "Potenciando seguridad y eficiencia. Convertimos instalaciones antiguas en sistemas de energía seguros y modernos brindando un excelente servicio a nuestro clientes y enfocandonos en la mejor experiencia de nuestros usuarios."}
+            ? "Powering safety and efficiency. We turn hazardous wiring into state-of-the-art energy systems."
+            : "Potenciando seguridad y eficiencia. Convertimos instalaciones antiguas en sistemas de energía modernos."}
         </p>
       </div>
 
-      {/* SECCIÓN 1: EL PROBLEMA (Antes) */}
-      <div className="relative w-full h-[600px] bg-gray-900 overflow-hidden border-b-4 border-red-500">
-        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-red-900/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-red-500/50">
-            <span className="text-red-100 font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
-                <FaExclamationTriangle className="text-red-400" /> 
+      {/* SECCIÓN 1: ANTES (Fondo Gris US-GRAY) */}
+      <div className="relative w-full h-[600px] bg-us-gray overflow-hidden border-b-4 border-white/20">
+        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-us-dark/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-white/20">
+            <span className="text-white font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
+                <FaExclamationTriangle className="text-us-accent" /> 
                 {language === 'en' ? 'BEFORE' : 'ANTES'}
             </span>
         </div>
-        {/* Bend positivo: Sensación de "cerrado" o problema */}
-        <CircularGallery 
-            items={beforeImages} 
-            bend={3} 
-            textColor="#ffffff" 
-            borderRadius={0.05}
-        />
+        <CircularGallery items={beforeImages} bend={3} textColor="#000000" borderRadius={0.05} />
       </div>
 
-      {/* SECCIÓN 2: LA SOLUCIÓN (Después) */}
-      <div className="relative w-full h-[600px] bg-us-dark overflow-hidden">
-        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-us-mint/20 backdrop-blur-md px-8 py-3 rounded-full shadow-lg border border-us-mint/50">
-            <span className="text-us-mint font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
+      {/* SECCIÓN 2: DESPUÉS (Fondo Blanco) */}
+      <div className="relative w-full h-[600px] bg-white overflow-hidden">
+        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-10 bg-us-accent/90 backdrop-blur-md px-8 py-3 rounded-full shadow-lg">
+            <span className="text-white font-bold uppercase tracking-widest text-lg md:text-xl flex items-center gap-3">
                 <FaBolt /> 
                 {language === 'en' ? 'AFTER' : 'DESPUÉS'}
             </span>
         </div>
-        {/* Bend negativo: Sensación de "apertura" y solución */}
-        <CircularGallery 
-            items={afterImages} 
-            bend={-3} 
-            textColor="#ffffff" 
-            borderRadius={0.05} 
-        />
+        <CircularGallery items={afterImages} bend={-3} textColor="#1a1a1a" borderRadius={0.05} />
       </div>
 
-      {/* NUEVO FINAL SIMPLE (Reemplaza <ContactSection />) */}
-      <div className="py-20 bg-us-light text-center px-4">
+      {/* CTA */}
+      <div className="py-20 bg-us-light text-center px-4 border-t border-us-gray">
         <h2 className="text-3xl font-bold text-us-dark mb-6">
             {language === 'en' ? "Ready to transform your space?" : "¿Listo para transformar tu espacio?"}
         </h2>
@@ -96,7 +75,25 @@ export default function Electrical() {
             {language === 'en' ? "Get Information" : "Solicita Información"}
         </Link>
       </div>
+
+      {/* FOOTER */}
+      <footer className="bg-black w-full py-12 px-6 relative z-20 border-t border-white/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-sm text-white/50">
+            <div className="font-medium hover:text-us-accent transition-colors cursor-default text-center md:text-left order-3 md:order-1">
+                Designed by <span className="text-white">Whyvrix</span>
+            </div>
+            <div className="flex flex-col items-center gap-3 order-1 md:order-2">
+                <p className="text-us-accent text-[10px] uppercase tracking-[0.2em] font-bold">Follow Us</p>
+                <div className="flex gap-4 p-2 bg-white/5 rounded-full border border-white/5 backdrop-blur-sm hover:border-us-accent/30 transition-colors">
+                    <SocialLinks className="text-white hover:text-us-accent transition-transform hover:scale-110 duration-200" iconSize="text-lg" />
+                </div>
+            </div>
+            <div className="text-center md:text-right order-2 md:order-3 leading-relaxed">
+                <p>© 2025 US Home Improvement LLC.</p>
+                <p className="text-xs opacity-60">All rights reserved.</p>
+            </div>
+        </div>
+      </footer>
     </div>
   );
 }
-
