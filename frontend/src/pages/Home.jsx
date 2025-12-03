@@ -1,4 +1,4 @@
-import LiquidEther from '../blocks/Backgrounds/LiquidEther/Liquid_Ether'; 
+import LiquidEther from '../blocks/Backgrounds/liquidEther/LiquidEther'; 
 import InfiniteMenu from '../blocks/Components/InfiniteMenu/InfiniteMenu';
 import ScrollStack from '../blocks/Components/ScrollStack/ScrollStack'; 
 import { useLanguage } from '../context/LanguageContext';
